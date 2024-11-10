@@ -1,9 +1,48 @@
 {% extends 'admin/base_site.html' %}
 {% block content %}
-    <h1>THỐNG KÊ THÔNG TIN CÁC KHOÁ HỌC</h1>
-    <ul>
-        {% for c in stats %}
-        <li><strong>{{ c.name }}</strong> có {{ c.count }} bài học</li>
-        {% endfor %}
-    </ul>
+<h1>THỐNG KÊ THÔNG TIN CÁC KHOÁ HỌC</h1>
+<ul>
+    {% for c in stats %}
+    <li><strong>{{ c.name }}</strong> có {{ c.count }} bài học</li>
+    {% endfor %}
+</ul>
+<div style="width: 60%">
+    <canvas id="myChart"></canvas>
+</div>
+<script>
+
+    let data=[];
+    let label=[];
+
+    {% for c in stats %}
+        label.push('{{c.name}}')
+        data.push({{c.count}})
+    {% endfor %}
+
+    window.onload=function(){
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: label,
+            datasets: [{
+            label: '# số lượng',
+            data: data,
+            borderWidth: 1,
+            backgroundColor: ['red', 'blue', 'yellow']
+        }]
+    },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+        }
+      }
+    }
+  });
+  }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
